@@ -3,13 +3,12 @@ import React, { useState } from 'react';
 import FusionCharts from 'fusioncharts';
 import Maps from 'fusioncharts/fusioncharts.maps';
 import ReactFC from 'react-fusioncharts';
-import IndiaMap from 'fusioncharts/maps/fusioncharts.india';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import { mpDistricts, getMaxPopulation, getMinPopulation } from '@/data/mpDistricts';
 import { Card, CardContent } from '@/components/ui/card';
 
 // Initialize FusionCharts with necessary modules
-ReactFC.fcRoot(FusionCharts, Maps, IndiaMap, FusionTheme);
+ReactFC.fcRoot(FusionCharts, Maps, FusionTheme);
 
 const FusionChartsMap: React.FC = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -96,15 +95,18 @@ const FusionChartsMap: React.FC = () => {
   return (
     <Card className="w-full min-h-[600px] shadow-lg">
       <CardContent className="p-0 overflow-hidden">
-        <ReactFC
-          {...chartConfigs}
-          onRender={(chart) => {
-            chart.addEventListener('entityClick', (event) => {
-              const clickedDistrict = event.data.id;
-              setSelectedDistrict(clickedDistrict);
-            });
-          }}
-        />
+        {React.createElement(
+          ReactFC,
+          {
+            ...chartConfigs,
+            onRender: (chart: any) => {
+              chart.addEventListener('entityClick', (event: any) => {
+                const clickedDistrict = event.data.id;
+                setSelectedDistrict(clickedDistrict);
+              });
+            }
+          }
+        )}
       </CardContent>
     </Card>
   );
