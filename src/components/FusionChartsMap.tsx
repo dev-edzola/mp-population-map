@@ -96,8 +96,8 @@ const FusionChartsMap: React.FC = () => {
     <Card className="w-full min-h-[600px] shadow-lg">
       <CardContent className="p-0 overflow-hidden">
         <div id="fusioncharts-container">
-          {/* Using a wrapping div and direct createElement approach for ReactFC */}
-          {ReactFC && ReactFC(chartConfigs)}
+          {/* Using ReactFC as a JSX component with all configuration props */}
+          <ReactFC {...chartConfigs} />
         </div>
       </CardContent>
     </Card>
