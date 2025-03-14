@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 import FusionCharts from 'fusioncharts';
 import Maps from 'fusioncharts/fusioncharts.maps';
 import ReactFC from 'react-fusioncharts';
-import MPMap from 'fusioncharts/maps/fusioncharts.madhyapradesh';
+import IndiaMap from 'fusioncharts/maps/fusioncharts.india';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import { mpDistricts, getMaxPopulation, getMinPopulation } from '@/data/mpDistricts';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Initialize FusionCharts
-ReactFC.fcRoot(FusionCharts, Maps, MPMap, FusionTheme);
+// Initialize FusionCharts with necessary modules
+ReactFC.fcRoot(FusionCharts, Maps, IndiaMap, FusionTheme);
 
 const FusionChartsMap: React.FC = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -24,16 +24,15 @@ const FusionChartsMap: React.FC = () => {
 
   // Prepare the data for FusionCharts
   const mapData = mpDistricts.map(district => ({
-    id: district.name.toLowerCase().replace(/ /g, ''),
+    id: district.id,
     value: district.population,
-    showLabel: district.population > 1500000, // Only show labels for larger districts
     displayValue: district.name,
     toolText: `${district.name}: ${formatNumber(district.population)}`
   }));
 
   // FusionCharts configuration
   const chartConfigs = {
-    type: 'map/madhyapradesh',
+    type: 'india',
     width: '100%',
     height: '600',
     dataFormat: 'json',
@@ -41,7 +40,7 @@ const FusionChartsMap: React.FC = () => {
       chart: {
         animation: '1',
         showLabels: '1',
-        includeValueInLabels: '1',
+        includeValueInLabels: '0',
         useSNameInLabels: '0',
         theme: 'fusion',
         nullEntityColor: '#F8F8F8',
@@ -63,7 +62,14 @@ const FusionChartsMap: React.FC = () => {
         showBorder: '1',
         borderColor: '#FFFFFF',
         borderThickness: '0.5',
-        borderAlpha: '80'
+        borderAlpha: '80',
+        // Center the map on Madhya Pradesh
+        centerLongitude: "77.4126",
+        centerLatitude: "23.2599",
+        // Zoom in to focus on Madhya Pradesh
+        initialScale: "3",
+        // Show only the state of Madhya Pradesh
+        entityToolText: "Madhya Pradesh"
       },
       colorrange: {
         minvalue: minPop,

@@ -3,6 +3,7 @@ import React from 'react';
 import FusionChartsMap from '@/components/FusionChartsMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import MapInfoBox from '@/components/MapInfoBox';
+import MapLegend from '@/components/MapLegend';
 
 const Index = () => {
   return (
@@ -17,8 +18,9 @@ const Index = () => {
           </p>
         </CardHeader>
         <CardContent className="pt-4 relative">
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <FusionChartsMap />
+            <MapLegend />
           </div>
           <div className="text-center text-xs text-gray-500 mt-2">
             Data source: Census of India | Color intensity indicates population density
