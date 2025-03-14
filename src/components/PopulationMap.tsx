@@ -1,217 +1,136 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import { mpDistricts, getMadhyaPradeshCenter, getMaxPopulation, getMinPopulation } from '@/data/mpDistricts';
+import React, { useState } from 'react';
+import { mpDistricts, getMaxPopulation, getMinPopulation } from '@/data/mpDistricts';
 import MapLegend from './MapLegend';
 import MapInfoBox from './MapInfoBox';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
-interface PopulationMapProps {
-  mapboxToken?: string;
-}
-
-const PopulationMap: React.FC<PopulationMapProps> = ({ mapboxToken }) => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [token, setToken] = useState<string>(mapboxToken || '');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [mapInitialized, setMapInitialized] = useState<boolean>(false);
-
-  const initializeMap = (accessToken: string) => {
-    if (!mapContainer.current || !accessToken || accessToken.trim() === '') return;
+const PopulationMap: React.FC = () => {
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  
+  const minPop = getMinPopulation();
+  const maxPop = getMaxPopulation();
+  const popRange = maxPop - minPop;
+  
+  // Calculate the relative size for circles based on population
+  const getCircleSize = (population: number) => {
+    const normalized = (population - minPop) / popRange;
+    return 10 + normalized * 30; // Between 10 and 40px
+  };
+  
+  // Calculate color intensity based on population
+  const getCircleColor = (population: number) => {
+    const normalizedPop = (population - minPop) / popRange;
     
-    setLoading(true);
-    
-    try {
-      mapboxgl.accessToken = accessToken;
-      
-      if (map.current) map.current.remove();
-      
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/light-v11',
-        center: getMadhyaPradeshCenter(),
-        zoom: 5.5,
-      });
-
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-      
-      map.current.on('load', () => {
-        if (!map.current) return;
-        
-        // Add district markers
-        const minPop = getMinPopulation();
-        const maxPop = getMaxPopulation();
-        const popRange = maxPop - minPop;
-        
-        // Add districts as circle markers
-        const features = mpDistricts.map(district => {
-          // Calculate color intensity based on population
-          const normalizedPop = (district.population - minPop) / popRange;
-          
-          // Create the feature
-          return {
-            type: 'Feature',
-            properties: {
-              id: district.id,
-              name: district.name,
-              population: district.population,
-              normalizedPop: normalizedPop
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: district.coordinates
-            }
-          };
-        });
-        
-        // Add source and layer
-        map.current.addSource('districts', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: features
-          }
-        });
-        
-        map.current.addLayer({
-          id: 'district-points',
-          type: 'circle',
-          source: 'districts',
-          paint: {
-            'circle-radius': [
-              'interpolate', ['linear'], ['get', 'population'],
-              minPop, 10,
-              maxPop, 30
-            ],
-            'circle-color': [
-              'interpolate', ['linear'], ['get', 'normalizedPop'],
-              0, '#E5DEFF',
-              0.5, '#A78BFA',
-              1, '#7C3AED'
-            ],
-            'circle-opacity': 0.8,
-            'circle-stroke-width': 1,
-            'circle-stroke-color': '#fff'
-          }
-        });
-
-        // Add popups for districts
-        const popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false
-        });
-
-        map.current.on('mouseenter', 'district-points', (e) => {
-          if (!map.current || !e.features || e.features.length === 0) return;
-          
-          map.current.getCanvas().style.cursor = 'pointer';
-          
-          const feature = e.features[0];
-          const coordinates = feature.geometry.coordinates.slice() as [number, number];
-          const name = feature.properties.name;
-          const population = feature.properties.population;
-          
-          // Format number with commas
-          const formattedPopulation = new Intl.NumberFormat('en-IN').format(population);
-          
-          const html = `
-            <div class="text-center">
-              <h3 class="font-bold">${name}</h3>
-              <p>Population: ${formattedPopulation}</p>
-            </div>
-          `;
-          
-          popup.setLngLat(coordinates)
-               .setHTML(html)
-               .addTo(map.current);
-        });
-
-        map.current.on('mouseleave', 'district-points', () => {
-          if (!map.current) return;
-          map.current.getCanvas().style.cursor = '';
-          popup.remove();
-        });
-        
-        setMapInitialized(true);
-        setLoading(false);
-      });
-      
-    } catch (error) {
-      console.error('Error initializing map:', error);
-      setLoading(false);
+    // Interpolate between colors based on population density
+    if (normalizedPop < 0.33) {
+      return '#E5DEFF'; // Light purple for low density
+    } else if (normalizedPop < 0.66) {
+      return '#A78BFA'; // Medium purple for medium density
+    } else {
+      return '#7C3AED'; // Dark purple for high density
     }
   };
 
-  const handleTokenSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (token.trim() !== '') {
-      initializeMap(token);
-    }
+  const handleDistrictHover = (districtId: string | null) => {
+    setSelectedDistrict(districtId);
   };
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (map.current) {
-        map.current.remove();
-      }
-    };
-  }, []);
-
-  // Initialize map with token if available
-  useEffect(() => {
-    if (mapboxToken && mapboxToken.trim() !== '') {
-      setToken(mapboxToken);
-      initializeMap(mapboxToken);
-    }
-  }, [mapboxToken]);
+  // Format numbers with commas
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('en-IN').format(num);
+  };
 
   return (
     <div className="relative w-full h-[calc(100vh-2rem)]">
-      {!mapInitialized && (
-        <div className="absolute inset-0 flex items-center justify-center z-20 bg-white/80">
-          <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-4 text-center">Madhya Pradesh Population Map</h2>
-            <p className="mb-4 text-gray-600">
-              To display the map, please enter your Mapbox access token below. 
-              You can get a free token at <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">mapbox.com</a>.
-            </p>
-            <form onSubmit={handleTokenSubmit} className="space-y-4">
-              <Input
-                type="text"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                placeholder="Enter Mapbox access token"
-                required
-                className="w-full"
+      <div className="absolute inset-0 rounded-lg shadow-lg bg-white overflow-hidden">
+        <Card className="h-full w-full relative p-4">
+          <div className="h-full w-full relative">
+            {/* SVG Map */}
+            <svg width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+              {/* Background for MP state - simplified outline */}
+              <path 
+                d="M150,150 L650,150 L650,450 L150,450 Z" 
+                fill="#F3F4F6" 
+                stroke="#D1D5DB"
+                strokeWidth="1"
               />
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading...
-                  </>
-                ) : (
-                  'Load Map'
-                )}
-              </Button>
-            </form>
+              
+              {/* Plot districts as circles */}
+              {mpDistricts.map((district) => {
+                // Map lat/long to x/y coordinates in our 800x600 viewBox
+                // This is a very simplified approach - in a real app you'd use proper geospatial projections
+                const x = ((district.coordinates[0] - 74) / 9) * 600 + 100;
+                const y = (((district.coordinates[1] - 21) / 5) * 400) + 100;
+                
+                return (
+                  <g key={district.id}>
+                    <circle
+                      cx={x}
+                      cy={y}
+                      r={getCircleSize(district.population)}
+                      fill={getCircleColor(district.population)}
+                      stroke="white"
+                      strokeWidth="1"
+                      opacity="0.8"
+                      onMouseEnter={() => handleDistrictHover(district.id)}
+                      onMouseLeave={() => handleDistrictHover(null)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    {district.population > 2000000 && (
+                      <text
+                        x={x}
+                        y={y}
+                        textAnchor="middle"
+                        dy="0.3em"
+                        fontSize="10"
+                        fill="#4B5563"
+                        pointerEvents="none"
+                      >
+                        {district.name}
+                      </text>
+                    )}
+                  </g>
+                );
+              })}
+              
+              {/* Show tooltip for selected district */}
+              {selectedDistrict && (() => {
+                const district = mpDistricts.find(d => d.id === selectedDistrict);
+                if (!district) return null;
+                
+                const x = ((district.coordinates[0] - 74) / 9) * 600 + 100;
+                const y = (((district.coordinates[1] - 21) / 5) * 400) + 100;
+                
+                return (
+                  <g>
+                    <rect
+                      x={x + 15}
+                      y={y - 40}
+                      width="120"
+                      height="50"
+                      rx="5"
+                      fill="white"
+                      stroke="#E5E7EB"
+                      strokeWidth="1"
+                    />
+                    <text x={x + 25} y={y - 20} fontSize="12" fontWeight="bold" fill="#111827">
+                      {district.name}
+                    </text>
+                    <text x={x + 25} y={y} fontSize="11" fill="#4B5563">
+                      Population: {formatNumber(district.population)}
+                    </text>
+                  </g>
+                );
+              })()}
+            </svg>
           </div>
-        </div>
-      )}
+        </Card>
+      </div>
       
-      <div ref={mapContainer} className="absolute inset-0 rounded-lg shadow-lg" />
-      
-      {mapInitialized && (
-        <>
-          <MapInfoBox />
-          <MapLegend />
-        </>
-      )}
+      {/* Info and Legend */}
+      <MapInfoBox />
+      <MapLegend />
     </div>
   );
 };
