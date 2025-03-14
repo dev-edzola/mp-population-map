@@ -95,18 +95,10 @@ const FusionChartsMap: React.FC = () => {
   return (
     <Card className="w-full min-h-[600px] shadow-lg">
       <CardContent className="p-0 overflow-hidden">
-        {React.createElement(
-          ReactFC,
-          {
-            ...chartConfigs,
-            onRender: (chart: any) => {
-              chart.addEventListener('entityClick', (event: any) => {
-                const clickedDistrict = event.data.id;
-                setSelectedDistrict(clickedDistrict);
-              });
-            }
-          }
-        )}
+        <div id="fusioncharts-container">
+          {/* Using a wrapping div and direct createElement approach for ReactFC */}
+          {ReactFC && ReactFC(chartConfigs)}
+        </div>
       </CardContent>
     </Card>
   );
