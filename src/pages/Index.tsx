@@ -1,12 +1,13 @@
 
 import React from 'react';
-import PopulationMap from '@/components/PopulationMap';
+import FusionChartsMap from '@/components/FusionChartsMap';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import MapInfoBox from '@/components/MapInfoBox';
 
 const Index = () => {
   return (
     <div className="min-h-screen p-4 bg-gray-50">
-      <Card className="mb-4 mx-auto max-w-5xl">
+      <Card className="mb-4 mx-auto max-w-7xl">
         <CardHeader className="text-center border-b pb-3">
           <CardTitle className="text-3xl font-bold text-indigo-800">
             Madhya Pradesh - District Population Map
@@ -15,13 +16,14 @@ const Index = () => {
             Visualization of population distribution across Madhya Pradesh districts
           </p>
         </CardHeader>
-        <CardContent className="pt-4">
+        <CardContent className="pt-4 relative">
           <div className="mb-4">
-            <PopulationMap />
+            <FusionChartsMap />
           </div>
           <div className="text-center text-xs text-gray-500 mt-2">
             Data source: Census of India | Color intensity indicates population density
           </div>
+          <MapInfoBox />
         </CardContent>
       </Card>
     </div>
