@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -66,6 +65,10 @@ interface Intervention {
   };
   cost: number;
   requiredResources: number;
+}
+
+interface MissionHealthGameProps {
+  onGameComplete?: (score: number) => void;
 }
 
 // Game challenges
@@ -183,7 +186,7 @@ const INTERVENTIONS: Intervention[] = [
   },
 ];
 
-const MissionHealthGame: React.FC = () => {
+const MissionHealthGame: React.FC<MissionHealthGameProps> = ({ onGameComplete }) => {
   // Game state
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
@@ -306,6 +309,17 @@ const MissionHealthGame: React.FC = () => {
     
     if (allTargetsMet) {
       setGameCompleted(true);
+      
+      // Calculate score based on metrics and remaining resources
+      const metricsScore = newMetrics.reduce((acc, metric) => acc + metric.value, 0);
+      const resourceScore = remainingResources * 2;
+      const totalScore = Math.floor((metricsScore + resourceScore) / 10);
+      
+      // Call the onGameComplete prop with the score
+      if (onGameComplete) {
+        onGameComplete(totalScore);
+      }
+      
       toast({
         title: "Congratulations!",
         description: "You've successfully improved all health metrics!",
@@ -610,6 +624,10 @@ const MissionHealthGame: React.FC = () => {
       </Card>
     </div>
   );
+};
+
+MissionHealthGame.defaultProps = {
+  onGameComplete: () => {},
 };
 
 export default MissionHealthGame;
