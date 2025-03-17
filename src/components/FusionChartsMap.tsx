@@ -2,13 +2,13 @@
 import React, { useState } from 'react';
 import FusionCharts from 'fusioncharts';
 import Maps from 'fusioncharts/fusioncharts.maps';
-import ReactFC from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import { mpDistricts, getMaxPopulation, getMinPopulation } from '@/data/mpDistricts';
 import { Card, CardContent } from '@/components/ui/card';
 
 // Initialize FusionCharts with necessary modules
-ReactFC.fcRoot(FusionCharts, Maps, FusionTheme);
+FusionCharts.addDep(Maps);
+FusionCharts.addDep(FusionTheme);
 
 const FusionChartsMap: React.FC = () => {
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -31,7 +31,7 @@ const FusionChartsMap: React.FC = () => {
 
   // FusionCharts configuration
   const chartConfigs = {
-    type: 'india',
+    type: 'maps/india',
     width: '100%',
     height: '600',
     dataFormat: 'json',
@@ -92,13 +92,25 @@ const FusionChartsMap: React.FC = () => {
     }
   };
 
+  // Use FusionCharts directly rather than through ReactFC
+  React.useEffect(() => {
+    // Create chart instance
+    const chartInstance = new FusionCharts(chartConfigs);
+    // Render the chart
+    chartInstance.render('fusioncharts-container');
+    
+    // Cleanup function
+    return () => {
+      if (chartInstance) {
+        chartInstance.dispose();
+      }
+    };
+  }, []);  // Empty dependency array means this effect runs once on mount
+
   return (
     <Card className="w-full min-h-[600px] shadow-lg">
       <CardContent className="p-0 overflow-hidden">
-        <div id="fusioncharts-container">
-          {/* Using ReactFC as a JSX component with all configuration props */}
-          <ReactFC {...chartConfigs} />
-        </div>
+        <div id="fusioncharts-container" className="w-full h-[600px]"></div>
       </CardContent>
     </Card>
   );
