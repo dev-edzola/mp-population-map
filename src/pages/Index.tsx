@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import MapInfoBox from '@/components/MapInfoBox';
 import MapLegend from '@/components/MapLegend';
-import { Baby, ChevronRight, GameController } from 'lucide-react';
+import { Baby, ChevronRight, Gamepad2 } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -29,7 +29,7 @@ const Index = () => {
             </Link>
             <Link to="/mission-health">
               <Button className="bg-green-600 hover:bg-green-700 group">
-                <GameController className="mr-2 h-4 w-4" />
+                <Gamepad2 className="mr-2 h-4 w-4" />
                 Play Mission Health Game
                 <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>

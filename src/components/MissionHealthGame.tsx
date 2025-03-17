@@ -16,7 +16,8 @@ import {
   ChevronRight, 
   Check, 
   X,
-  ChartBar
+  ChartBar,
+  Gamepad2
 } from 'lucide-react';
 import { mpDistricts } from '@/data/mpDistricts';
 import FusionChartsMap from './FusionChartsMap';
@@ -251,7 +252,7 @@ const MissionHealthGame: React.FC = () => {
       toast({
         title: "Warning",
         description: "Please select at least one intervention",
-        variant: "warning",
+        variant: "default",
       });
       return;
     }
@@ -518,7 +519,6 @@ const MissionHealthGame: React.FC = () => {
                             '--tw-bg-opacity': '0.3', 
                             backgroundColor: `${metric.color}40`,
                           } as React.CSSProperties}
-                          indicatorClassName={`${metric.value >= metric.target ? 'bg-green-500' : ''}`}
                         />
                       </CardContent>
                     </Card>
