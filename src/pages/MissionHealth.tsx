@@ -5,11 +5,12 @@ import MissionHealthDashboard from '@/components/MissionHealthDashboard';
 import MissionHealthAnimatedHeader from '@/components/MissionHealthAnimatedHeader';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Trophy, Gamepad2, BarChart3 } from 'lucide-react';
+import { Trophy, Home, BarChart3 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import MissionHealthLoadingScreen from '@/components/MissionHealthLoadingScreen';
 
 const MissionHealth = () => {
-  const [activeTab, setActiveTab] = useState('game');
+  const [activeTab, setActiveTab] = useState('home');
   const [achievements, setAchievements] = useState({
     gamesPlayed: 0,
     missionsCompleted: 0,
@@ -18,6 +19,7 @@ const MissionHealth = () => {
   const [xpPoints, setXpPoints] = useState(0);
   const [level, setLevel] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Simulated progress towards next level
   const progressToNextLevel = Math.min(100, ((xpPoints % 100) / 100) * 100);
@@ -35,6 +37,13 @@ const MissionHealth = () => {
       setXpPoints(xp);
       setLevel(Math.floor(xp / 100) + 1);
     }
+    
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const handleGameComplete = (score: number) => {
@@ -70,6 +79,10 @@ const MissionHealth = () => {
     }
   };
   
+  if (isLoading) {
+    return <MissionHealthLoadingScreen />;
+  }
+  
   return (
     <div className="min-h-screen p-4 bg-gray-50">
       {/* Add the animated header at the top of the page */}
@@ -82,12 +95,12 @@ const MissionHealth = () => {
           </CardHeader>
 
           <CardContent className="p-0">
-            <Tabs defaultValue="game" value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <Tabs defaultValue="home" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="border-b px-6 py-2">
                 <TabsList className="grid grid-cols-2 w-80">
-                  <TabsTrigger value="game" className="flex items-center gap-2">
-                    <Gamepad2 className="h-4 w-4" />
-                    Game
+                  <TabsTrigger value="home" className="flex items-center gap-2">
+                    <Home className="h-4 w-4" />
+                    Home
                   </TabsTrigger>
                   <TabsTrigger value="dashboard" className="flex items-center gap-2">
                     <BarChart3 className="h-4 w-4" />
@@ -96,7 +109,7 @@ const MissionHealth = () => {
                 </TabsList>
               </div>
               
-              <TabsContent value="game" className="m-0">
+              <TabsContent value="home" className="m-0">
                 <MissionHealthGame onGameComplete={handleGameComplete} />
               </TabsContent>
               
