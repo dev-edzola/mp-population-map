@@ -21,6 +21,7 @@ interface StatCardProps {
   monthlyValue?: number;
 }
 
+// More compact StatCard component
 const StatCard = ({ 
   icon: Icon, 
   title, 
@@ -51,23 +52,23 @@ const StatCard = ({
   
   return (
     <Card className="overflow-hidden hover-scale transition-all duration-300 border-t-4" style={{ borderTopColor: color }}>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex gap-3 items-center">
-            <div className={`p-2 rounded-full animate-horizontal-slide-in ${delayClass}`} style={{ backgroundColor: `${color}30` }}>
-              <Icon className="h-5 w-5" style={{ color: color }} />
+      <CardContent className="p-3">
+        <div className="flex justify-between items-start mb-2">
+          <div className="flex gap-2 items-center">
+            <div className={`p-1.5 rounded-full animate-horizontal-slide-in ${delayClass}`} style={{ backgroundColor: `${color}30` }}>
+              <Icon className="h-4 w-4" style={{ color: color }} />
             </div>
-            <h3 className="font-medium text-gray-700">{title}</h3>
+            <h3 className="font-medium text-sm text-gray-700">{title}</h3>
           </div>
           <span className="text-xs font-medium text-gray-500">Target: {target.toLocaleString()}</span>
         </div>
         
-        <div className="flex items-baseline justify-between mb-2">
-          <span className="text-3xl font-bold">{currentValue.toLocaleString()}</span>
-          <span className="text-sm text-gray-500">{unit}</span>
+        <div className="flex items-baseline justify-between mb-1">
+          <span className="text-2xl font-bold">{currentValue.toLocaleString()}</span>
+          <span className="text-xs text-gray-500">{unit}</span>
         </div>
         
-        <div className="relative h-2 mt-2 rounded-full overflow-hidden bg-gray-100">
+        <div className="relative h-1.5 mt-1 rounded-full overflow-hidden bg-gray-100">
           <div 
             className="absolute top-0 left-0 h-full"
             style={{ 
@@ -77,20 +78,20 @@ const StatCard = ({
           ></div>
         </div>
         
-        <div className="text-right mt-1 mb-4">
+        <div className="text-right mt-0.5 mb-2">
           <span className="text-xs font-medium" style={{ color }}>
             {percentage.toFixed(0)}% of target
           </span>
         </div>
         
         {/* Monthly progress */}
-        <div className="mt-4">
-          <div className="flex justify-between items-center mb-1">
+        <div className="mt-2">
+          <div className="flex justify-between items-center mb-0.5">
             <span className="text-xs font-medium text-gray-600">Monthly Progress</span>
-            <span className="text-xs font-medium text-gray-600">{monthlyValue} of {monthlyTarget} activities</span>
+            <span className="text-xs font-medium text-gray-600">{monthlyValue} of {monthlyTarget}</span>
           </div>
-          <Progress value={monthlyPercentage} className="h-2" />
-          <div className="text-right mt-1">
+          <Progress value={monthlyPercentage} className="h-1.5" />
+          <div className="text-right mt-0.5">
             <span className="text-xs font-medium" style={{ color }}>
               {monthlyPercentage.toFixed(0)}% completed
             </span>
@@ -101,6 +102,7 @@ const StatCard = ({
   );
 };
 
+// More compact LiveImpactCounter
 const LiveImpactCounter = () => {
   const [womenHelped, setWomenHelped] = useState(0);
   const [childrenSaved, setChildrenSaved] = useState(0);
@@ -118,29 +120,29 @@ const LiveImpactCounter = () => {
   }, []);
   
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-4 border border-green-100 animate-fade-in">
-      <h3 className="text-center text-gray-700 font-medium mb-4">Live Impact Counter</h3>
-      <div className="grid grid-cols-2 gap-6 text-center">
+    <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-3 border border-green-100 animate-fade-in">
+      <h3 className="text-center text-gray-700 font-medium text-sm mb-2">Live Impact Counter</h3>
+      <div className="grid grid-cols-2 gap-4 text-center">
         <div className="flex flex-col items-center">
-          <div className="bg-pink-100 p-4 rounded-full mb-2 pulse">
-            <HandHeart className="h-6 w-6 text-pink-500" />
+          <div className="bg-pink-100 p-2 rounded-full mb-1 pulse">
+            <HandHeart className="h-4 w-4 text-pink-500" />
           </div>
-          <div className="text-2xl font-bold text-pink-600">{womenHelped.toLocaleString()}</div>
-          <div className="text-sm text-gray-600">Women Supported</div>
+          <div className="text-xl font-bold text-pink-600">{womenHelped.toLocaleString()}</div>
+          <div className="text-xs text-gray-600">Women Supported</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="bg-blue-100 p-4 rounded-full mb-2 pulse">
-            <Baby className="h-6 w-6 text-blue-500" />
+          <div className="bg-blue-100 p-2 rounded-full mb-1 pulse">
+            <Baby className="h-4 w-4 text-blue-500" />
           </div>
-          <div className="text-2xl font-bold text-blue-600">{childrenSaved.toLocaleString()}</div>
-          <div className="text-sm text-gray-600">Children Protected</div>
+          <div className="text-xl font-bold text-blue-600">{childrenSaved.toLocaleString()}</div>
+          <div className="text-xs text-gray-600">Children Protected</div>
         </div>
       </div>
     </div>
   );
 };
 
-// Update ImpactDataChart component to use horizontal animations
+// More compact ImpactDataChart
 const ImpactDataChart = () => {
   const [chartVisible, setChartVisible] = useState(false);
   const data = [
@@ -174,9 +176,9 @@ const ImpactDataChart = () => {
   
   return (
     <Card className="shadow-sm animate-fade-in">
-      <CardContent className="p-6">
-        <h3 className="font-medium text-gray-700 mb-4">Health Impact Trends</h3>
-        <div className={`h-[300px] transition-opacity duration-500 ${chartVisible ? 'opacity-100' : 'opacity-0'}`}>
+      <CardContent className="p-4">
+        <h3 className="font-medium text-gray-700 mb-2 text-sm">Health Impact Trends</h3>
+        <div className={`h-[250px] transition-opacity duration-500 ${chartVisible ? 'opacity-100' : 'opacity-0'}`}>
           <ChartContainer config={config} className="h-full w-full">
             <BarChart data={data} className="animate-horizontal-slide-in">
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -194,6 +196,7 @@ const ImpactDataChart = () => {
   );
 };
 
+// Keep ZohoAnalyticsDashboard the same
 const ZohoAnalyticsDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -322,19 +325,19 @@ const MissionHealthDashboard = () => {
   const monthlyValueTotal = 12 + 18 + 24 + 8; // Sum of all monthly values
   
   return (
-    <div className="p-4 space-y-6 animate-fade-in">
+    <div className="p-3 space-y-4 animate-fade-in">
       <RescueAnimation monthlyTarget={monthlyTargetTotal} completedValue={monthlyValueTotal} />
       
-      <div className="mb-6">
-        <h3 className="text-xl font-semibold mb-2">Impact Overview</h3>
-        <p className="text-gray-500 mb-4">
-          Real-time data showing our impact on maternal and child health across Madhya Pradesh.
-        </p>
+      <div className="mb-3">
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold">Impact Overview</h3>
+          <span className="text-xs text-gray-500">Real-time health impact data</span>
+        </div>
         
         <LiveImpactCounter />
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
         <StatCard 
           icon={Heart} 
           title="Women Supported" 
