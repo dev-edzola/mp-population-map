@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import MissionHealthAnimatedHeader from './MissionHealthAnimatedHeader';
+import RescueAnimation from './RescueAnimation';
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -294,6 +295,8 @@ const MissionHealthDashboard = () => {
   return (
     <div className="p-4 space-y-6 animate-fade-in">
       <MissionHealthAnimatedHeader />
+      
+      <RescueAnimation />
       
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2">Impact Overview</h3>
