@@ -1,13 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import MissionHealthGame from '@/components/MissionHealthGame';
 import MissionHealthDashboard from '@/components/MissionHealthDashboard';
 import MissionHealthAnimatedHeader from '@/components/MissionHealthAnimatedHeader';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { ChartBar, Gamepad2, Trophy, Medal, Star, Sparkles, BarChart3 } from 'lucide-react';
+import { Trophy, Gamepad2, BarChart3 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const MissionHealth = () => {
@@ -78,29 +76,8 @@ const MissionHealth = () => {
       <MissionHealthAnimatedHeader />
       
       <Card className="max-w-7xl mx-auto shadow-lg border-none mb-4">
-        <CardHeader className="bg-green-600 text-white rounded-t-lg flex flex-row justify-between items-center">
-          <div>
-            <CardTitle className="text-3xl font-bold mb-2">Mission Health</CardTitle>
-            <CardDescription className="text-green-50">
-              Play the game and analyze real-world health data to make a difference!
-            </CardDescription>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="bg-white/20 p-2 rounded-lg text-center">
-              <p className="text-xs text-green-50">Level</p>
-              <div className="flex items-center gap-1">
-                <Star className="h-4 w-4 text-yellow-300 fill-yellow-300" />
-                <p className="text-xl font-bold">{level}</p>
-              </div>
-              <div className="w-20">
-                <Progress value={progressToNextLevel} className="h-1 mt-1 bg-white/30" />
-              </div>
-            </div>
-            <div className="bg-white/20 p-2 rounded-lg text-center">
-              <p className="text-xs text-green-50">XP</p>
-              <p className="text-xl font-bold">{xpPoints}</p>
-            </div>
-          </div>
+        <CardHeader className="bg-green-600 text-white rounded-t-lg">
+          {/* Removed the title, description, level and XP indicators */}
         </CardHeader>
 
         <CardContent className="p-0">
