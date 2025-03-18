@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Baby, Heart, Shield, Users, HandHeart, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
+import { Baby, Heart, Shield, Users, HandHeart, RefreshCw, ChevronDown, ChevronUp, Calendar, CheckSquare } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -102,10 +102,12 @@ const StatCard = ({
   );
 };
 
-// More compact LiveImpactCounter
+// Updated LiveImpactCounter to include activities planned and completed
 const LiveImpactCounter = () => {
   const [womenHelped, setWomenHelped] = useState(0);
   const [childrenSaved, setChildrenSaved] = useState(0);
+  const [activitiesPlanned, setActivitiesPlanned] = useState(120);
+  const [activitiesCompleted, setActivitiesCompleted] = useState(78);
   
   useEffect(() => {
     // Periodically increment counters to simulate real-time impact
@@ -114,29 +116,58 @@ const LiveImpactCounter = () => {
       if (Math.random() > 0.7) {
         setChildrenSaved(prev => prev + 1);
       }
+      if (Math.random() > 0.9) {
+        setActivitiesCompleted(prev => Math.min(prev + 1, activitiesPlanned));
+      }
     }, 3000);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [activitiesPlanned]);
+  
+  // Calculate completion percentage
+  const completionPercentage = Math.round((activitiesCompleted / activitiesPlanned) * 100);
   
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-3 border border-green-100 animate-fade-in">
-      <h3 className="text-center text-gray-700 font-medium text-sm mb-2">Live Impact Counter</h3>
-      <div className="grid grid-cols-2 gap-4 text-center">
+    <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-2 border border-green-100 animate-fade-in">
+      <h3 className="text-center text-gray-700 font-medium text-sm mb-1">Live Impact Counter</h3>
+      <div className="grid grid-cols-4 gap-2 text-center">
         <div className="flex flex-col items-center">
-          <div className="bg-pink-100 p-2 rounded-full mb-1 pulse">
-            <HandHeart className="h-4 w-4 text-pink-500" />
+          <div className="bg-pink-100 p-1.5 rounded-full mb-1 pulse">
+            <HandHeart className="h-3.5 w-3.5 text-pink-500" />
           </div>
-          <div className="text-xl font-bold text-pink-600">{womenHelped.toLocaleString()}</div>
+          <div className="text-lg font-bold text-pink-600">{womenHelped.toLocaleString()}</div>
           <div className="text-xs text-gray-600">Women Supported</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="bg-blue-100 p-2 rounded-full mb-1 pulse">
-            <Baby className="h-4 w-4 text-blue-500" />
+          <div className="bg-blue-100 p-1.5 rounded-full mb-1 pulse">
+            <Baby className="h-3.5 w-3.5 text-blue-500" />
           </div>
-          <div className="text-xl font-bold text-blue-600">{childrenSaved.toLocaleString()}</div>
+          <div className="text-lg font-bold text-blue-600">{childrenSaved.toLocaleString()}</div>
           <div className="text-xs text-gray-600">Children Protected</div>
         </div>
+        <div className="flex flex-col items-center">
+          <div className="bg-purple-100 p-1.5 rounded-full mb-1 pulse">
+            <Calendar className="h-3.5 w-3.5 text-purple-500" />
+          </div>
+          <div className="text-lg font-bold text-purple-600">{activitiesPlanned.toLocaleString()}</div>
+          <div className="text-xs text-gray-600">Activities Planned</div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="bg-green-100 p-1.5 rounded-full mb-1 pulse">
+            <CheckSquare className="h-3.5 w-3.5 text-green-500" />
+          </div>
+          <div className="text-lg font-bold text-green-600">{activitiesCompleted.toLocaleString()}</div>
+          <div className="text-xs text-gray-600">Activities Completed</div>
+        </div>
+      </div>
+      
+      {/* Add a progress bar to show completion percentage */}
+      <div className="mt-2 px-2">
+        <div className="flex justify-between items-center text-xs mb-0.5">
+          <span className="text-gray-600">Progress</span>
+          <span className="font-medium text-green-600">{completionPercentage}%</span>
+        </div>
+        <Progress value={completionPercentage} className="h-1.5" />
       </div>
     </div>
   );
