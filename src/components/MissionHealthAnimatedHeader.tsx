@@ -30,7 +30,7 @@ const MissionHealthAnimatedHeader = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-52 md:h-60 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 rounded-lg mb-6 shadow-xl">
+    <div className="relative w-full h-52 md:h-60 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 rounded-lg mb-6 shadow-xl max-w-7xl mx-auto">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
         {[...Array(25)].map((_, i) => (

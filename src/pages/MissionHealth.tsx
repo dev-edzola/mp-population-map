@@ -73,38 +73,40 @@ const MissionHealth = () => {
   return (
     <div className="min-h-screen p-4 bg-gray-50">
       {/* Add the animated header at the top of the page */}
-      <MissionHealthAnimatedHeader />
+      <div className="max-w-7xl mx-auto">
+        <MissionHealthAnimatedHeader />
       
-      <Card className="max-w-7xl mx-auto shadow-lg border-none mb-4">
-        <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
-          {/* Removed the title, description, level and XP indicators */}
-        </CardHeader>
+        <Card className="shadow-lg border-none mb-4">
+          <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
+            {/* Removed the title, description, level and XP indicators */}
+          </CardHeader>
 
-        <CardContent className="p-0">
-          <Tabs defaultValue="game" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="border-b px-6 py-2">
-              <TabsList className="grid grid-cols-2 w-80">
-                <TabsTrigger value="game" className="flex items-center gap-2">
-                  <Gamepad2 className="h-4 w-4" />
-                  Game
-                </TabsTrigger>
-                <TabsTrigger value="dashboard" className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  Dashboard
-                </TabsTrigger>
-              </TabsList>
-            </div>
-            
-            <TabsContent value="game" className="m-0">
-              <MissionHealthGame onGameComplete={handleGameComplete} />
-            </TabsContent>
-            
-            <TabsContent value="dashboard" className="m-0">
-              <MissionHealthDashboard />
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+          <CardContent className="p-0">
+            <Tabs defaultValue="game" value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="border-b px-6 py-2">
+                <TabsList className="grid grid-cols-2 w-80">
+                  <TabsTrigger value="game" className="flex items-center gap-2">
+                    <Gamepad2 className="h-4 w-4" />
+                    Game
+                  </TabsTrigger>
+                  <TabsTrigger value="dashboard" className="flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Dashboard
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+              
+              <TabsContent value="game" className="m-0">
+                <MissionHealthGame onGameComplete={handleGameComplete} />
+              </TabsContent>
+              
+              <TabsContent value="dashboard" className="m-0">
+                <MissionHealthDashboard />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
       
       {showConfetti && (
         <div className="fixed inset-0 pointer-events-none z-50">
