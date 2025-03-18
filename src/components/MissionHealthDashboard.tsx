@@ -7,6 +7,7 @@ import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import RescueAnimation from './RescueAnimation';
 
 interface StatCardProps {
@@ -215,12 +216,21 @@ const ImpactDataChart = () => {
   );
 };
 
-// Keep ZohoAnalyticsDashboard the same
+// Updated ZohoAnalyticsDashboard to include toggle between multiple reports
 const ZohoAnalyticsDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [dashboardHeight, setDashboardHeight] = useState(800);
   const [isOpen, setIsOpen] = useState(true);
+  const [selectedReport, setSelectedReport] = useState("main");
+
+  // Dashboard report sources
+  const reports = {
+    main: "https://analytics.zoho.in/open-view/384516000000149412",
+    secondary: "https://analytics.zoho.in/open-view/384516000000149022",
+    detailed: "https://analytics.zoho.in/open-view/384516000000151355",
+    d3visual: "https://dev-edzola.github.io/D3js-/"
+  };
 
   useEffect(() => {
     // Adjust height based on viewport
@@ -242,6 +252,16 @@ const ZohoAnalyticsDashboard = () => {
       clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    // Reset loading state when switching reports
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [selectedReport]);
 
   const handleRefresh = () => {
     setIsLoading(true);
@@ -302,6 +322,23 @@ const ZohoAnalyticsDashboard = () => {
       </div>
       
       <CollapsibleContent>
+        <div className="bg-white p-2 border-b flex justify-center">
+          <ToggleGroup type="single" value={selectedReport} onValueChange={(value) => value && setSelectedReport(value)}>
+            <ToggleGroupItem value="main" aria-label="Main Dashboard">
+              Main Dashboard
+            </ToggleGroupItem>
+            <ToggleGroupItem value="secondary" aria-label="Secondary Report">
+              Health Metrics
+            </ToggleGroupItem>
+            <ToggleGroupItem value="detailed" aria-label="Detailed Analysis">
+              Detailed Analysis
+            </ToggleGroupItem>
+            <ToggleGroupItem value="d3visual" aria-label="D3 Visualization">
+              D3 Visualization
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+        
         <div className="relative" style={{ height: `${dashboardHeight}px` }}>
           {isLoading && (
             <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10">
@@ -326,7 +363,7 @@ const ZohoAnalyticsDashboard = () => {
               frameBorder="0" 
               width="100%" 
               height={dashboardHeight} 
-              src="https://analytics.zoho.in/open-view/384516000000149412"
+              src={reports[selectedReport as keyof typeof reports]}
               className="w-full"
               onLoad={handleIframeLoad}
               onError={handleIframeError}
