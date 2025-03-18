@@ -19,7 +19,10 @@ const CollapsibleContent = React.forwardRef<
     )}
     {...props}
   >
-    <div className="collapsible-content-animation">{children}</div>
+    <div className="collapsible-content-animation">
+      <div className="w-full h-0.5 bg-gradient-to-r from-green-300 to-blue-500 mb-1 animate-horizontal-progress"></div>
+      {children}
+    </div>
   </CollapsiblePrimitive.Content>
 ))
 

@@ -16,9 +16,10 @@ interface StatCardProps {
   target: number;
   color: string;
   unit: string;
+  animationDelay?: number;
 }
 
-const StatCard = ({ icon: Icon, title, value, target, color, unit }: StatCardProps) => {
+const StatCard = ({ icon: Icon, title, value, target, color, unit, animationDelay = 0 }: StatCardProps) => {
   const [currentValue, setCurrentValue] = useState(0);
   
   useEffect(() => {
@@ -33,13 +34,14 @@ const StatCard = ({ icon: Icon, title, value, target, color, unit }: StatCardPro
   }, [currentValue, value]);
   
   const percentage = Math.min(100, (currentValue / target) * 100);
+  const delayClass = `horizontal-stagger-${animationDelay + 1}`;
   
   return (
     <Card className="overflow-hidden hover-scale transition-all duration-300 border-t-4" style={{ borderTopColor: color }}>
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-4">
           <div className="flex gap-3 items-center">
-            <div className="p-2 rounded-full" style={{ backgroundColor: `${color}30` }}>
+            <div className={`p-2 rounded-full animate-horizontal-slide-in ${delayClass}`} style={{ backgroundColor: `${color}30` }}>
               <Icon className="h-5 w-5" style={{ color: color }} />
             </div>
             <h3 className="font-medium text-gray-700">{title}</h3>
@@ -52,11 +54,16 @@ const StatCard = ({ icon: Icon, title, value, target, color, unit }: StatCardPro
           <span className="text-sm text-gray-500">{unit}</span>
         </div>
         
-        <Progress 
-          value={percentage} 
-          className="h-2 mt-2"
-          style={{ backgroundColor: `${color}30` }}
-        />
+        <div className="relative h-2 mt-2 rounded-full overflow-hidden bg-gray-100">
+          <div 
+            className="absolute top-0 left-0 h-full animate-horizontal-expand"
+            style={{ 
+              backgroundColor: color, 
+              '--target-width': `${percentage}%`,
+              animationDelay: `${animationDelay * 0.2}s`
+            } as React.CSSProperties}
+          ></div>
+        </div>
         
         <div className="text-right mt-1">
           <span className="text-xs font-medium" style={{ color }}>
@@ -107,7 +114,9 @@ const LiveImpactCounter = () => {
   );
 };
 
+// Update ImpactDataChart component to use horizontal animations
 const ImpactDataChart = () => {
+  const [chartVisible, setChartVisible] = useState(false);
   const data = [
     { name: 'Jan', maternal: 65, child: 48 },
     { name: 'Feb', maternal: 70, child: 53 },
@@ -116,6 +125,15 @@ const ImpactDataChart = () => {
     { name: 'May', maternal: 82, child: 68 },
     { name: 'Jun', maternal: 87, child: 74 },
   ];
+  
+  useEffect(() => {
+    // Show chart with slight delay for animation effect
+    const timer = setTimeout(() => {
+      setChartVisible(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   const config = {
     maternal: {
@@ -132,9 +150,9 @@ const ImpactDataChart = () => {
     <Card className="shadow-sm animate-fade-in">
       <CardContent className="p-6">
         <h3 className="font-medium text-gray-700 mb-4">Health Impact Trends</h3>
-        <div className="h-[300px]">
+        <div className={`h-[300px] transition-opacity duration-500 ${chartVisible ? 'opacity-100' : 'opacity-0'}`}>
           <ChartContainer config={config} className="h-full w-full">
-            <BarChart data={data}>
+            <BarChart data={data} className="animate-horizontal-slide-in">
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <XAxis dataKey="name" />
               <YAxis />
@@ -293,7 +311,8 @@ const MissionHealthDashboard = () => {
           value={12547} 
           target={15000} 
           color="#ec4899" 
-          unit="women" 
+          unit="women"
+          animationDelay={0}
         />
         <StatCard 
           icon={Baby} 
@@ -301,7 +320,8 @@ const MissionHealthDashboard = () => {
           value={8932} 
           target={10000} 
           color="#3b82f6" 
-          unit="children" 
+          unit="children"
+          animationDelay={1}
         />
         <StatCard 
           icon={Shield} 
@@ -309,7 +329,8 @@ const MissionHealthDashboard = () => {
           value={7652} 
           target={9000} 
           color="#8b5cf6" 
-          unit="children" 
+          unit="children"
+          animationDelay={2}
         />
         <StatCard 
           icon={Users} 
@@ -317,7 +338,8 @@ const MissionHealthDashboard = () => {
           value={342} 
           target={400} 
           color="#10b981" 
-          unit="villages" 
+          unit="villages"
+          animationDelay={3}
         />
       </div>
       
