@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Baby, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
@@ -9,8 +9,39 @@ interface RescueAnimationProps {
 }
 
 const RescueAnimation = ({ monthlyTarget = 30, completedValue = 12 }: RescueAnimationProps) => {
+  // Animation states
+  const [animatedValue, setAnimatedValue] = useState(0);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  
   // Calculate completion percentage
-  const completionPercentage = Math.min(100, (completedValue / monthlyTarget) * 100);
+  const completionPercentage = Math.min(100, (animatedValue / monthlyTarget) * 100);
+  
+  useEffect(() => {
+    // Animation for the first time the component loads
+    if (isFirstLoad) {
+      let startValue = 0;
+      const animationDuration = 1500; // 1.5 seconds
+      const interval = 30; // Update every 30ms
+      const steps = animationDuration / interval;
+      const increment = completedValue / steps;
+      
+      const timer = setInterval(() => {
+        startValue += increment;
+        
+        if (startValue >= completedValue) {
+          setAnimatedValue(completedValue);
+          clearInterval(timer);
+          setIsFirstLoad(false);
+        } else {
+          setAnimatedValue(startValue);
+        }
+      }, interval);
+      
+      return () => clearInterval(timer);
+    } else {
+      setAnimatedValue(completedValue);
+    }
+  }, [completedValue, isFirstLoad, monthlyTarget]);
   
   return (
     <div className="relative h-24 w-full bg-blue-50 rounded-lg mb-6 overflow-hidden border border-blue-100">
@@ -20,7 +51,7 @@ const RescueAnimation = ({ monthlyTarget = 30, completedValue = 12 }: RescueAnim
       {/* Progress bar showing completion */}
       <div className="absolute bottom-2 left-4 right-4">
         <div className="flex justify-between text-xs text-blue-500 mb-1">
-          <span>{completedValue} completed</span>
+          <span>{Math.round(animatedValue)} completed</span>
           <span>Target: {monthlyTarget}</span>
         </div>
         <Progress value={completionPercentage} className="h-1 bg-blue-100" />
@@ -31,7 +62,7 @@ const RescueAnimation = ({ monthlyTarget = 30, completedValue = 12 }: RescueAnim
         className="absolute top-1/2 transform -translate-y-1/2"
         style={{ 
           left: `${Math.min(Math.max(completionPercentage, 5), 90)}%`, 
-          transition: 'left 1s ease-in-out'
+          transition: 'left 1.5s ease-in-out'
         }}
       >
         <div className="flex items-center gap-2">
