@@ -18,9 +18,21 @@ interface StatCardProps {
   color: string;
   unit: string;
   animationDelay?: number;
+  monthlyTarget?: number;
+  monthlyValue?: number;
 }
 
-const StatCard = ({ icon: Icon, title, value, target, color, unit, animationDelay = 0 }: StatCardProps) => {
+const StatCard = ({ 
+  icon: Icon, 
+  title, 
+  value, 
+  target, 
+  color, 
+  unit, 
+  animationDelay = 0,
+  monthlyTarget = 30,
+  monthlyValue = 12
+}: StatCardProps) => {
   const [currentValue, setCurrentValue] = useState(0);
   
   useEffect(() => {
@@ -35,6 +47,7 @@ const StatCard = ({ icon: Icon, title, value, target, color, unit, animationDela
   }, [currentValue, value]);
   
   const percentage = Math.min(100, (currentValue / target) * 100);
+  const monthlyPercentage = Math.min(100, (monthlyValue / monthlyTarget) * 100);
   const delayClass = `horizontal-stagger-${animationDelay + 1}`;
   
   return (
@@ -57,19 +70,32 @@ const StatCard = ({ icon: Icon, title, value, target, color, unit, animationDela
         
         <div className="relative h-2 mt-2 rounded-full overflow-hidden bg-gray-100">
           <div 
-            className="absolute top-0 left-0 h-full animate-horizontal-expand"
+            className="absolute top-0 left-0 h-full"
             style={{ 
               backgroundColor: color, 
-              '--target-width': `${percentage}%`,
-              animationDelay: `${animationDelay * 0.2}s`
-            } as React.CSSProperties}
+              width: `${percentage}%`,
+            }}
           ></div>
         </div>
         
-        <div className="text-right mt-1">
+        <div className="text-right mt-1 mb-4">
           <span className="text-xs font-medium" style={{ color }}>
             {percentage.toFixed(0)}% of target
           </span>
+        </div>
+        
+        {/* Monthly progress */}
+        <div className="mt-4">
+          <div className="flex justify-between items-center mb-1">
+            <span className="text-xs font-medium text-gray-600">Monthly Progress</span>
+            <span className="text-xs font-medium text-gray-600">{monthlyValue} of {monthlyTarget} activities</span>
+          </div>
+          <Progress value={monthlyPercentage} className="h-2" />
+          <div className="text-right mt-1">
+            <span className="text-xs font-medium" style={{ color }}>
+              {monthlyPercentage.toFixed(0)}% completed
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -316,6 +342,8 @@ const MissionHealthDashboard = () => {
           color="#ec4899" 
           unit="women"
           animationDelay={0}
+          monthlyTarget={30}
+          monthlyValue={12}
         />
         <StatCard 
           icon={Baby} 
@@ -325,6 +353,8 @@ const MissionHealthDashboard = () => {
           color="#3b82f6" 
           unit="children"
           animationDelay={1}
+          monthlyTarget={30}
+          monthlyValue={18}
         />
         <StatCard 
           icon={Shield} 
@@ -334,6 +364,8 @@ const MissionHealthDashboard = () => {
           color="#8b5cf6" 
           unit="children"
           animationDelay={2}
+          monthlyTarget={30}
+          monthlyValue={24}
         />
         <StatCard 
           icon={Users} 
@@ -343,6 +375,8 @@ const MissionHealthDashboard = () => {
           color="#10b981" 
           unit="villages"
           animationDelay={3}
+          monthlyTarget={30}
+          monthlyValue={8}
         />
       </div>
       
