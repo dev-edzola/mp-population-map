@@ -76,7 +76,7 @@ const MissionHealth = () => {
       <MissionHealthAnimatedHeader />
       
       <Card className="max-w-7xl mx-auto shadow-lg border-none mb-4">
-        <CardHeader className="bg-green-600 text-white rounded-t-lg">
+        <CardHeader className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-t-lg">
           {/* Removed the title, description, level and XP indicators */}
         </CardHeader>
 

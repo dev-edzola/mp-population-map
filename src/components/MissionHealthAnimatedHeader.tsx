@@ -30,13 +30,13 @@ const MissionHealthAnimatedHeader = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-52 md:h-60 overflow-hidden bg-gradient-to-r from-purple-600 via-pink-500 to-blue-500 rounded-lg mb-6">
+    <div className="relative w-full h-52 md:h-60 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-500 to-pink-500 rounded-lg mb-6 shadow-xl">
       {/* Animated background elements */}
       <div className="absolute inset-0 opacity-20">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(25)].map((_, i) => (
           <div 
             key={i}
-            className="absolute rounded-full bg-white/10"
+            className="absolute rounded-full bg-white/20"
             style={{
               width: `${10 + Math.random() * 30}px`,
               height: `${10 + Math.random() * 30}px`,
@@ -53,13 +53,13 @@ const MissionHealthAnimatedHeader = () => {
 
       {/* Hospital and clinic centers */}
       <div className="absolute top-1/4 left-1/4 hospital-animation">
-        <div className="bg-white/30 p-2 rounded-lg">
+        <div className="bg-white/30 p-2 rounded-lg backdrop-blur-sm">
           <Hospital className="h-8 w-8 text-white" />
         </div>
       </div>
       
       <div className="absolute bottom-1/4 right-1/4 hospital-animation" style={{ animationDelay: '2s' }}>
-        <div className="bg-white/30 p-2 rounded-lg">
+        <div className="bg-white/30 p-2 rounded-lg backdrop-blur-sm">
           <Hospital className="h-8 w-8 text-white" />
         </div>
       </div>
@@ -67,11 +67,11 @@ const MissionHealthAnimatedHeader = () => {
       {/* Dynamic Healthcare Workers with Patients */}
       <div className="absolute left-[20%] top-[30%] health-worker-animation">
         <div className="flex items-center gap-2">
-          <div className="bg-blue-400/70 p-2 rounded-full">
+          <div className="bg-indigo-400/80 p-2 rounded-full backdrop-blur-sm">
             <Stethoscope className="h-6 w-6 text-white" />
           </div>
           <div className="flex -ml-1">
-            <div className="bg-pink-400/70 p-2 rounded-full">
+            <div className="bg-pink-400/80 p-2 rounded-full backdrop-blur-sm">
               <User className="h-5 w-5 text-white" />
             </div>
           </div>
@@ -83,11 +83,11 @@ const MissionHealthAnimatedHeader = () => {
 
       <div className="absolute right-[20%] top-[60%] health-worker-animation">
         <div className="flex items-center gap-2">
-          <div className="bg-indigo-400/70 p-2 rounded-full">
+          <div className="bg-purple-400/80 p-2 rounded-full backdrop-blur-sm">
             <HandHeart className="h-6 w-6 text-white" />
           </div>
           <div className="flex -ml-1">
-            <div className="bg-blue-300/70 p-2 rounded-full">
+            <div className="bg-blue-300/80 p-2 rounded-full backdrop-blur-sm">
               <Baby className="h-5 w-5 text-white" />
             </div>
           </div>
@@ -99,14 +99,14 @@ const MissionHealthAnimatedHeader = () => {
 
       <div className="absolute left-[40%] bottom-[20%] health-worker-animation">
         <div className="flex items-center gap-2">
-          <div className="bg-green-400/70 p-2 rounded-full">
+          <div className="bg-indigo-500/80 p-2 rounded-full backdrop-blur-sm">
             <Stethoscope className="h-6 w-6 text-white" />
           </div>
           <div className="flex -ml-1 space-x-[-5px]">
-            <div className="bg-pink-400/70 p-2 rounded-full">
+            <div className="bg-pink-400/80 p-2 rounded-full backdrop-blur-sm">
               <User className="h-5 w-5 text-white" />
             </div>
-            <div className="bg-blue-300/70 p-2 rounded-full">
+            <div className="bg-blue-300/80 p-2 rounded-full backdrop-blur-sm">
               <Baby className="h-5 w-5 text-white" />
             </div>
           </div>
@@ -118,7 +118,7 @@ const MissionHealthAnimatedHeader = () => {
       </div>
 
       {/* Floating particles representing saved lives */}
-      {[...Array(30)].map((_, i) => (
+      {[...Array(35)].map((_, i) => (
         <div 
           key={i}
           className="absolute animate-float"
@@ -130,7 +130,7 @@ const MissionHealthAnimatedHeader = () => {
           }}
         >
           <Sparkles 
-            className="text-white/60" 
+            className="text-white/70" 
             size={Math.floor(10 + Math.random() * 15)} 
           />
         </div>
@@ -141,20 +141,20 @@ const MissionHealthAnimatedHeader = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-2 drop-shadow-lg">
           Saving Lives Together
         </h2>
-        <p className="text-lg text-white/90 text-center max-w-md px-4">
+        <p className="text-lg text-white/90 text-center max-w-md px-4 font-light">
           Your participation helps protect mothers and children in Madhya Pradesh
         </p>
       </div>
       
       {/* Impact counter */}
       <div className="absolute bottom-3 left-0 right-0 flex justify-center">
-        <div className="flex gap-6 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+        <div className="flex gap-6 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
           <div className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-pink-200" />
+            <Heart className="h-5 w-5 text-pink-200 fill-pink-200/50" />
             <span className="text-white font-medium text-sm">{savedCount.women.toLocaleString()} Women</span>
           </div>
           <div className="flex items-center gap-2">
-            <Baby className="h-5 w-5 text-blue-200" />
+            <Baby className="h-5 w-5 text-blue-200 fill-blue-200/50" />
             <span className="text-white font-medium text-sm">{savedCount.children.toLocaleString()} Children</span>
           </div>
         </div>
