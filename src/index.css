@@ -130,4 +130,69 @@
   .animate-float {
     animation: float 8s ease-in-out infinite;
   }
+  
+  @keyframes moveRight {
+    0% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(30px) translateY(-10px);
+    }
+    50% {
+      transform: translateX(60px) translateY(0);
+    }
+    75% {
+      transform: translateX(30px) translateY(10px);
+    }
+    100% {
+      transform: translateX(0) translateY(0);
+    }
+  }
+  
+  @keyframes moveToHospital {
+    0% {
+      transform: translateX(0) translateY(0) scale(1);
+    }
+    50% {
+      transform: translateX(var(--move-x, 50px)) translateY(var(--move-y, -50px)) scale(1.1);
+    }
+    100% {
+      transform: translateX(0) translateY(0) scale(1);
+    }
+  }
+  
+  @keyframes pulse-scale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .health-worker-animation {
+    animation: moveRight 15s ease-in-out infinite;
+    --move-x: 100px;
+    --move-y: -20px;
+  }
+  
+  .health-worker-animation:nth-child(2n) {
+    animation-duration: 18s;
+    --move-x: -100px;
+    --move-y: -50px;
+  }
+  
+  .health-worker-animation:nth-child(3n) {
+    animation-duration: 20s;
+    animation-delay: 5s;
+    --move-x: 120px;
+    --move-y: 40px;
+  }
+  
+  .hospital-animation {
+    animation: pulse-scale 4s ease-in-out infinite;
+  }
 }
