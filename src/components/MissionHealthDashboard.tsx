@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Baby, Heart, Shield, Users, HandHeart } from 'lucide-react';
+import { Baby, Heart, Shield, Users, HandHeart, RefreshCw } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
 import MissionHealthAnimatedHeader from './MissionHealthAnimatedHeader';
 
 interface StatCardProps {
@@ -147,6 +149,110 @@ const ImpactDataChart = () => {
   );
 };
 
+const ZohoAnalyticsDashboard = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [dashboardHeight, setDashboardHeight] = useState(800);
+
+  useEffect(() => {
+    // Adjust height based on viewport
+    const updateHeight = () => {
+      const viewportHeight = window.innerHeight;
+      setDashboardHeight(Math.max(600, viewportHeight * 0.7));
+    };
+
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    
+    // Set a timeout to consider the dashboard as loaded
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+    
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const handleRefresh = () => {
+    setIsLoading(true);
+    // Refresh the iframe by changing the src slightly
+    const iframe = document.getElementById('zoho-analytics-frame') as HTMLIFrameElement;
+    if (iframe) {
+      const currentSrc = iframe.src;
+      iframe.src = '';
+      setTimeout(() => {
+        iframe.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'refresh=' + Date.now();
+        // Set a timeout to consider the dashboard as loaded again
+        setTimeout(() => setIsLoading(false), 3000);
+      }, 100);
+    }
+  };
+
+  const handleIframeLoad = () => {
+    setIsLoading(false);
+    setHasError(false);
+  };
+
+  const handleIframeError = () => {
+    setIsLoading(false);
+    setHasError(true);
+  };
+
+  return (
+    <Card className="rounded-lg overflow-hidden border shadow-lg mt-6 hover-scale transition-all duration-300">
+      <div className="bg-green-50 p-4 border-b border-green-100 flex justify-between items-center">
+        <h3 className="font-medium text-green-700 flex items-center gap-2">
+          <Shield className="h-4 w-4 text-green-600" /> 
+          Antara Foundation's Live Data Dashboard
+        </h3>
+        <Button 
+          variant="outline" 
+          size="sm" 
+          onClick={handleRefresh}
+          className="text-green-600 border-green-200 hover:bg-green-100"
+        >
+          <RefreshCw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
+          {isLoading ? 'Loading...' : 'Refresh'}
+        </Button>
+      </div>
+      
+      <div className="relative" style={{ height: `${dashboardHeight}px` }}>
+        {isLoading && (
+          <div className="absolute inset-0 bg-white/80 flex flex-col items-center justify-center z-10">
+            <div className="animate-spin h-12 w-12 rounded-full border-4 border-green-500 border-t-transparent mb-4"></div>
+            <p className="text-green-700">Loading dashboard data...</p>
+          </div>
+        )}
+        
+        {hasError && (
+          <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10">
+            <div className="text-red-500 mb-4 text-6xl">!</div>
+            <p className="text-red-700 mb-2">Unable to load the dashboard</p>
+            <Button onClick={handleRefresh} variant="outline" className="mt-2">
+              Try Again
+            </Button>
+          </div>
+        )}
+        
+        <ScrollArea variant="fancy" className="h-full w-full">
+          <iframe 
+            id="zoho-analytics-frame"
+            frameBorder="0" 
+            width="100%" 
+            height={dashboardHeight} 
+            src="https://analytics.zoho.in/open-view/384516000000149412"
+            className="w-full"
+            onLoad={handleIframeLoad}
+            onError={handleIframeError}
+          ></iframe>
+        </ScrollArea>
+      </div>
+    </Card>
+  );
+};
+
 const MissionHealthDashboard = () => {
   return (
     <div className="p-4 space-y-6 animate-fade-in">
@@ -198,21 +304,7 @@ const MissionHealthDashboard = () => {
       
       <ImpactDataChart />
       
-      <div className="rounded-lg overflow-hidden border shadow-lg mt-6 hover-scale transition-all duration-300">
-        <div className="bg-green-50 p-4 border-b border-green-100">
-          <h3 className="font-medium text-green-700 flex items-center gap-2">
-            <Shield className="h-4 w-4 text-green-600" /> 
-            Antara Foundation's Live Data Dashboard
-          </h3>
-        </div>
-        <iframe 
-          frameBorder="0" 
-          width="100%" 
-          height="800" 
-          src="https://analytics.zoho.in/open-view/384516000000149412"
-          className="w-full"
-        ></iframe>
-      </div>
+      <ZohoAnalyticsDashboard />
     </div>
   );
 };
