@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import MissionHealthGame from '@/components/MissionHealthGame';
+import MissionHealthDashboard from '@/components/MissionHealthDashboard';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -119,102 +119,7 @@ const MissionHealth = () => {
             </TabsContent>
             
             <TabsContent value="dashboard" className="m-0">
-              <div className="p-4">
-                <div className="mb-6">
-                  <h3 className="text-xl font-semibold mb-4">Your Achievements</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                    <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-indigo-200">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-indigo-100 p-3 rounded-full">
-                            <Gamepad2 className="h-6 w-6 text-indigo-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-indigo-600 font-medium">Games Played</p>
-                            <p className="text-2xl font-bold">{achievements.gamesPlayed}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-emerald-200">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-emerald-100 p-3 rounded-full">
-                            <Medal className="h-6 w-6 text-emerald-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-emerald-600 font-medium">Missions Completed</p>
-                            <p className="text-2xl font-bold">{achievements.missionsCompleted}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-gradient-to-br from-amber-50 to-yellow-50 border-yellow-200">
-                      <CardContent className="pt-6">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-yellow-100 p-3 rounded-full">
-                            <Trophy className="h-6 w-6 text-yellow-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-yellow-600 font-medium">High Score</p>
-                            <p className="text-2xl font-bold">{achievements.highScore}</p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-                
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold mb-4 flex items-center">
-                    <ChartBar className="mr-2 h-5 w-5 text-green-600" />
-                    Real-time Maternal Health Dashboard
-                  </h3>
-                  <p className="text-gray-500 mb-4">
-                    Analyze real data from Antara Foundation's health initiatives across Madhya Pradesh.
-                    Use insights from this dashboard to inform your game strategy!
-                  </p>
-                </div>
-                
-                <div className="rounded-lg overflow-hidden border shadow-lg">
-                  <iframe 
-                    frameBorder="0" 
-                    width="100%" 
-                    height="800" 
-                    src="https://analytics.zoho.in/open-view/384516000000149412"
-                    className="transform transition-transform hover:scale-[1.01]"
-                  ></iframe>
-                </div>
-                
-                <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-green-100 p-2 rounded-full">
-                      <Sparkles className="h-5 w-5 text-green-600" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-green-800">Data-Driven Challenge</h4>
-                      <p className="text-green-700 text-sm">
-                        Study the dashboard data and try to achieve specific health targets in the game. 
-                        Can you improve child nutrition by more than 30% in a single game session?
-                      </p>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          setActiveTab('game');
-                          toast({
-                            title: "Challenge Accepted!",
-                            description: "Improve child nutrition by 30% to earn bonus XP",
-                          });
-                        }}
-                        className="mt-2 bg-white border-green-300 text-green-700 hover:bg-green-50"
-                      >
-                        Accept Challenge
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <MissionHealthDashboard />
             </TabsContent>
           </Tabs>
         </CardContent>
