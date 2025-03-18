@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Trophy, Gamepad2, BarChart3, Baby, Heart, Shield, Users, HandHeart, 
   RefreshCw, ChevronDown, ChevronUp, Calendar, CheckSquare, ShieldCheck,
-  Sparkles, User, Stethoscope, Hospital 
+  Sparkles, User, Stethoscope, Hospital, ArrowRight, Pulse
 } from 'lucide-react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -462,7 +461,7 @@ const HealthWorkerMotivation = ({ onStartGame }) => {
         
         <div className="flex flex-col items-center mt-8 space-y-6">
           <div className="text-center animate-pulse-slow">
-            <HeartPulse className="h-16 w-16 text-pink-500 mx-auto mb-2" />
+            <Pulse className="h-16 w-16 text-pink-500 mx-auto mb-2" />
             <p className="text-gray-600">Your work matters</p>
           </div>
           
