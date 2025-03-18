@@ -124,9 +124,6 @@ const LiveImpactCounter = () => {
     return () => clearInterval(interval);
   }, [activitiesPlanned]);
   
-  // Calculate completion percentage
-  const completionPercentage = Math.round((activitiesCompleted / activitiesPlanned) * 100);
-  
   return (
     <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-2 border border-green-100 animate-fade-in">
       <h3 className="text-center text-gray-700 font-medium text-sm mb-1">Live Impact Counter</h3>
@@ -159,15 +156,6 @@ const LiveImpactCounter = () => {
           <div className="text-lg font-bold text-green-600">{activitiesCompleted.toLocaleString()}</div>
           <div className="text-xs text-gray-600">Activities Completed</div>
         </div>
-      </div>
-      
-      {/* Add a progress bar to show completion percentage */}
-      <div className="mt-2 px-2">
-        <div className="flex justify-between items-center text-xs mb-0.5">
-          <span className="text-gray-600">Progress</span>
-          <span className="font-medium text-green-600">{completionPercentage}%</span>
-        </div>
-        <Progress value={completionPercentage} className="h-1.5" />
       </div>
     </div>
   );
