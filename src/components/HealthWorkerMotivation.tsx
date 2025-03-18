@@ -113,13 +113,15 @@ const HealthWorkerMotivation: React.FC<HealthWorkerMotivationProps> = ({ onStart
             Your mission: strategically deploy interventions to improve health outcomes in rural communities.
           </p>
           
-          <Button 
-            onClick={handleWordleClick}
-            className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-lg shadow-md hover:shadow-lg transition-all animate-fade-in flex items-center gap-2"
-          >
-            <BookOpen className="w-6 h-6" />
-            Learn a New Health Word
-          </Button>
+          <div className="flex justify-center">
+            <Button 
+              onClick={handleWordleClick}
+              className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-lg shadow-md hover:shadow-lg transition-all animate-fade-in flex items-center gap-2"
+            >
+              <BookOpen className="w-6 h-6" />
+              Learn a New Health Word
+            </Button>
+          </div>
         </div>
       </div>
       
