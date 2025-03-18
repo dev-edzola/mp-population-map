@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MissionHealthGame from '@/components/MissionHealthGame';
 import MissionHealthDashboard from '@/components/MissionHealthDashboard';
+import MissionHealthAnimatedHeader from '@/components/MissionHealthAnimatedHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -70,9 +71,12 @@ const MissionHealth = () => {
       setTimeout(() => setShowConfetti(false), 3000);
     }
   };
-
+  
   return (
     <div className="min-h-screen p-4 bg-gray-50">
+      {/* Add the animated header at the top of the page */}
+      <MissionHealthAnimatedHeader />
+      
       <Card className="max-w-7xl mx-auto shadow-lg border-none mb-4">
         <CardHeader className="bg-green-600 text-white rounded-t-lg flex flex-row justify-between items-center">
           <div>

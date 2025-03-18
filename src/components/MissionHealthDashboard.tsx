@@ -7,7 +7,6 @@ import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
-import MissionHealthAnimatedHeader from './MissionHealthAnimatedHeader';
 import RescueAnimation from './RescueAnimation';
 
 interface StatCardProps {
@@ -324,8 +323,6 @@ const MissionHealthDashboard = () => {
   
   return (
     <div className="p-4 space-y-6 animate-fade-in">
-      <MissionHealthAnimatedHeader />
-      
       <RescueAnimation monthlyTarget={monthlyTargetTotal} completedValue={monthlyValueTotal} />
       
       <div className="mb-6">
