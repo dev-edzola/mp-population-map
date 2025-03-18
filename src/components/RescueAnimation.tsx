@@ -1,15 +1,39 @@
 
 import React from 'react';
 import { User, Baby, Heart, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
-const RescueAnimation = () => {
+interface RescueAnimationProps {
+  monthlyTarget?: number;
+  completedValue?: number;
+}
+
+const RescueAnimation = ({ monthlyTarget = 30, completedValue = 12 }: RescueAnimationProps) => {
+  // Calculate completion percentage
+  const completionPercentage = Math.min(100, (completedValue / monthlyTarget) * 100);
+  
   return (
     <div className="relative h-24 w-full bg-blue-50 rounded-lg mb-6 overflow-hidden border border-blue-100">
       {/* Path line */}
       <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-blue-200 transform -translate-y-1/2"></div>
       
-      {/* The rescuer animation */}
-      <div className="absolute top-1/2 left-5 transform -translate-y-1/2 animate-rescue-run">
+      {/* Progress bar showing completion */}
+      <div className="absolute bottom-2 left-4 right-4">
+        <div className="flex justify-between text-xs text-blue-500 mb-1">
+          <span>{completedValue} completed</span>
+          <span>Target: {monthlyTarget}</span>
+        </div>
+        <Progress value={completionPercentage} className="h-1 bg-blue-100" />
+      </div>
+      
+      {/* The rescuer positioned based on completion percentage */}
+      <div 
+        className="absolute top-1/2 transform -translate-y-1/2"
+        style={{ 
+          left: `${Math.min(Math.max(completionPercentage, 5), 90)}%`, 
+          transition: 'left 1s ease-in-out'
+        }}
+      >
         <div className="flex items-center gap-2">
           <div className="bg-green-500 p-2 rounded-full">
             <User className="h-5 w-5 text-white" />

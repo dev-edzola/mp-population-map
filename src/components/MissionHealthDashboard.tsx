@@ -318,11 +318,15 @@ const ZohoAnalyticsDashboard = () => {
 };
 
 const MissionHealthDashboard = () => {
+  // Calculate total monthly progress across all activities
+  const monthlyTargetTotal = 30 * 4; // 30 for each of the 4 cards
+  const monthlyValueTotal = 12 + 18 + 24 + 8; // Sum of all monthly values
+  
   return (
     <div className="p-4 space-y-6 animate-fade-in">
       <MissionHealthAnimatedHeader />
       
-      <RescueAnimation />
+      <RescueAnimation monthlyTarget={monthlyTargetTotal} completedValue={monthlyValueTotal} />
       
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2">Impact Overview</h3>
