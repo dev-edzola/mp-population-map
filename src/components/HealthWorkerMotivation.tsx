@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Heart, Sparkles, Award, Lightbulb, BatteryCharging } from 'lucide-react';
+import { Heart, Sparkles, Award, Lightbulb, BatteryCharging, BookOpen } from 'lucide-react';
 import { motion } from '@/components/ui/motion';
+import { useNavigate } from 'react-router-dom';
 
 // Motivational quotes for healthcare workers
 const MOTIVATIONAL_QUOTES = [
@@ -51,6 +52,7 @@ interface HealthWorkerMotivationProps {
 const HealthWorkerMotivation: React.FC<HealthWorkerMotivationProps> = ({ onStartGame }) => {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Rotate through quotes every 8 seconds
@@ -67,6 +69,10 @@ const HealthWorkerMotivation: React.FC<HealthWorkerMotivationProps> = ({ onStart
 
   const currentQuote = MOTIVATIONAL_QUOTES[currentQuoteIndex];
   const Icon = currentQuote.icon;
+
+  const handleWordleClick = () => {
+    navigate('/health-wordle');
+  };
 
   return (
     <div className="min-h-[75vh] flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -108,10 +114,11 @@ const HealthWorkerMotivation: React.FC<HealthWorkerMotivationProps> = ({ onStart
           </p>
           
           <Button 
-            onClick={onStartGame}
-            className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-lg shadow-md hover:shadow-lg transition-all animate-fade-in"
+            onClick={handleWordleClick}
+            className="bg-green-600 hover:bg-green-700 text-white text-lg px-8 py-6 rounded-lg shadow-md hover:shadow-lg transition-all animate-fade-in flex items-center gap-2"
           >
-            Start Your Mission
+            <BookOpen className="w-6 h-6" />
+            Learn a New Health Word
           </Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import HealthWorkerMotivation from './HealthWorkerMotivation';
 import { toast } from '@/hooks/use-toast';
@@ -11,14 +11,11 @@ interface MissionHealthGameProps {
 
 const MissionHealthGame: React.FC<MissionHealthGameProps> = ({ onGameComplete }) => {
   const [gameStarted, setGameStarted] = useState(false);
+  const navigate = useNavigate();
 
-  // Start the game
+  // Start the game (now redirects to health wordle)
   const startGame = () => {
-    setGameStarted(true);
-    toast({
-      title: "Mission Started",
-      description: "Make strategic decisions to improve maternal and child health outcomes!",
-    });
+    navigate('/health-wordle');
   };
 
   // Handle game completion

@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import LifeJourney from "./pages/LifeJourney";
 import MissionHealth from "./pages/MissionHealth";
+import HealthWordle from "./components/HealthWordle";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/journey" element={<LifeJourney />} />
           <Route path="/mission-health" element={<MissionHealth />} />
+          <Route path="/health-wordle" element={<HealthWordle />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
