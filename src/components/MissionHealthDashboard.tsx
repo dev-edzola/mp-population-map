@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Baby, Heart, Shield, Users, HandHeart } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ChartContainer, ChartTooltip } from '@/components/ui/chart';
+import MissionHealthAnimatedHeader from './MissionHealthAnimatedHeader';
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -150,6 +150,8 @@ const ImpactDataChart = () => {
 const MissionHealthDashboard = () => {
   return (
     <div className="p-4 space-y-6 animate-fade-in">
+      <MissionHealthAnimatedHeader />
+      
       <div className="mb-6">
         <h3 className="text-xl font-semibold mb-2">Impact Overview</h3>
         <p className="text-gray-500 mb-4">
