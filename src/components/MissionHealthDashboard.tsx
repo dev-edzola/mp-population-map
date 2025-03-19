@@ -8,6 +8,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RescueAnimation from './RescueAnimation';
 import D3Visualization from './D3Visualization';
 
@@ -340,7 +341,7 @@ const ZohoAnalyticsDashboard = () => {
               Detailed Analysis
             </ToggleGroupItem>
             <ToggleGroupItem value="d3visual" aria-label="D3 Visualization">
-              D3 Visualization
+              India Map
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
