@@ -229,7 +229,7 @@ const ZohoAnalyticsDashboard = () => {
     main: "https://analytics.zoho.in/open-view/384516000000149412",
     secondary: "https://analytics.zoho.in/open-view/384516000000149022",
     detailed: "https://analytics.zoho.in/open-view/384516000000151355",
-    d3visual: "https://dev-edzola.github.io/D3js-/"
+    d3visual: "http://localhost:3000/D3js-"
   };
 
   useEffect(() => {
