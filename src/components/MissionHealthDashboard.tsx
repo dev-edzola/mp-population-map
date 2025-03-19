@@ -216,7 +216,7 @@ const ImpactDataChart = () => {
   );
 };
 
-// Updated ZohoAnalyticsDashboard to include toggle between multiple reports
+// Updated ZohoAnalyticsDashboard to handle D3 visualization properly
 const ZohoAnalyticsDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -229,7 +229,7 @@ const ZohoAnalyticsDashboard = () => {
     main: "https://analytics.zoho.in/open-view/384516000000149412",
     secondary: "https://analytics.zoho.in/open-view/384516000000149022",
     detailed: "https://analytics.zoho.in/open-view/384516000000151355",
-    d3visual: "http://localhost:3000/D3js-"
+    d3visual: "https://github.com/dev-edzola/D3js-"
   };
 
   useEffect(() => {
@@ -286,6 +286,14 @@ const ZohoAnalyticsDashboard = () => {
   const handleIframeError = () => {
     setIsLoading(false);
     setHasError(true);
+  };
+
+  // Determine the correct source URL based on the selected report
+  const getSourceUrl = () => {
+    if (selectedReport === 'd3visual') {
+      return 'https://dev-edzola.github.io/D3js-/';
+    }
+    return reports[selectedReport as keyof typeof reports];
   };
 
   return (
@@ -363,7 +371,7 @@ const ZohoAnalyticsDashboard = () => {
               frameBorder="0" 
               width="100%" 
               height={dashboardHeight} 
-              src={reports[selectedReport as keyof typeof reports]}
+              src={getSourceUrl()}
               className="w-full"
               onLoad={handleIframeLoad}
               onError={handleIframeError}
