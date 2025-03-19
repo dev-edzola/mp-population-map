@@ -8,6 +8,19 @@ interface D3VisualizationProps {
   height: number;
 }
 
+interface FeatureCollection {
+  type: string;
+  features: Array<{
+    type: string;
+    properties: {
+      name: string;
+      code: string;
+      [key: string]: any;
+    };
+    geometry: any;
+  }>;
+}
+
 const D3Visualization: React.FC<D3VisualizationProps> = ({ height }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   
@@ -57,8 +70,8 @@ const D3Visualization: React.FC<D3VisualizationProps> = ({ height }) => {
           "TN": 3000  // Tamil Nadu
         };
         
-        // Convert TopoJSON to GeoJSON
-        const india = topojson.feature(indiaData, indiaData.objects.india);
+        // Convert TopoJSON to GeoJSON - fix typing issue
+        const india = topojson.feature(indiaData, indiaData.objects.india) as unknown as FeatureCollection;
         
         // Create projection
         const projection = d3.geoMercator()
@@ -157,6 +170,7 @@ const D3Visualization: React.FC<D3VisualizationProps> = ({ height }) => {
           
         legendData.forEach((d, i) => {
           const [code, value] = d;
+          // Fix the line with TypeScript error
           const stateName = india.features.find(f => f.properties.code === code)?.properties.name || code;
           
           legendGroup.append("rect")
