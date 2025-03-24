@@ -4,15 +4,11 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<BrowserRouter basename="/mp-population-map">
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="/journey" element={<LifeJourney />} />
-    <Route path="/mission-health" element={<MissionHealth />} />
-    <Route path="/health-wordle" element={<HealthWordle />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-</BrowserRouter>
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import LifeJourney from "./pages/LifeJourney";
+import MissionHealth from "./pages/MissionHealth";
+import HealthWordle from "./components/HealthWordle";
 
 const queryClient = new QueryClient();
 
