@@ -107,27 +107,47 @@ const StatCard = ({
 const LiveImpactCounter = () => {
   const [womenHelped, setWomenHelped] = useState(0);
   const [childrenSaved, setChildrenSaved] = useState(0);
-  const [activitiesPlanned, setActivitiesPlanned] = useState(120);
-  const [activitiesCompleted, setActivitiesCompleted] = useState(78);
-  
+  const [activitiesPlanned, setActivitiesPlanned] = useState(0);
+  const [activitiesCompleted, setActivitiesCompleted] = useState(0);
+  const [error, setError] = useState(null); // Add error state
+
   useEffect(() => {
-    // Periodically increment counters to simulate real-time impact
-    const interval = setInterval(() => {
-      setWomenHelped(prev => prev + 1);
-      if (Math.random() > 0.7) {
-        setChildrenSaved(prev => prev + 1);
+    // Initialize Zoho Creator SDK and fetch data
+    const fetchData = async () => {
+      try {
+        await window.ZOHO.CREATOR.init();
+        const config = {
+          appName: "react-widgets",
+          reportName: "All_Activity_Reports"
+        };
+        const response = await window.ZOHO.CREATOR.API.getAllRecords(config);
+        if (response && response.data && response.data.length > 0) {
+          const data = response.data[0]; // Assuming the first record contains the required fields
+          setWomenHelped(data.Women_Supported || 0);
+          setChildrenSaved(data.Child_Protected || 0);
+          setActivitiesPlanned(data.Activities_Planned || 0);
+          setActivitiesCompleted(data.Activities_Completed || 0);
+          setError(null); // Clear any previous errors
+        } else {
+          throw new Error("No data returned from Zoho Creator API.");
+        }
+      } catch (err) {
+        console.error("Error fetching data from Zoho Creator:", err);
+        setError("Failed to fetch data. Please try again later.");
       }
-      if (Math.random() > 0.9) {
-        setActivitiesCompleted(prev => Math.min(prev + 1, activitiesPlanned));
-      }
-    }, 3000);
-    
-    return () => clearInterval(interval);
-  }, [activitiesPlanned]);
-  
+    };
+
+    fetchData();
+  }, []); // Removed dependency on `activitiesPlanned`
+
   return (
     <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-2 border border-green-100 animate-fade-in">
       <h3 className="text-center text-gray-700 font-medium text-sm mb-1">Live Impact Counter</h3>
+      {error && (
+        <div className="text-center text-red-500 text-xs mb-2">
+          {error}
+        </div>
+      )}
       <div className="grid grid-cols-4 gap-2 text-center">
         <div className="flex flex-col items-center">
           <div className="bg-pink-100 p-1.5 rounded-full mb-1 pulse">
