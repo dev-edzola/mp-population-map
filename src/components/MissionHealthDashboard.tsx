@@ -8,7 +8,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RescueAnimation from './RescueAnimation';
+import D3Visualization from './D3Visualization';
 
 interface StatCardProps {
   icon: React.ElementType;
@@ -236,7 +238,7 @@ const ImpactDataChart = () => {
   );
 };
 
-// Updated ZohoAnalyticsDashboard to include toggle between multiple reports
+// Updated ZohoAnalyticsDashboard to handle D3 visualization properly
 const ZohoAnalyticsDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -248,8 +250,7 @@ const ZohoAnalyticsDashboard = () => {
   const reports = {
     main: "https://analytics.zoho.in/open-view/384516000000149412",
     secondary: "https://analytics.zoho.in/open-view/384516000000149022",
-    detailed: "https://analytics.zoho.in/open-view/384516000000151355",
-    d3visual: "https://dev-edzola.github.io/D3js-/"
+    detailed: "https://analytics.zoho.in/open-view/384516000000151355"
   };
 
   useEffect(() => {
@@ -275,26 +276,32 @@ const ZohoAnalyticsDashboard = () => {
 
   useEffect(() => {
     // Reset loading state when switching reports
-    setIsLoading(true);
-    const timer = setTimeout(() => {
+    if (selectedReport !== 'd3visual') {
+      setIsLoading(true);
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    } else {
       setIsLoading(false);
-    }, 3000);
-    
-    return () => clearTimeout(timer);
+    }
   }, [selectedReport]);
 
   const handleRefresh = () => {
-    setIsLoading(true);
-    // Refresh the iframe by changing the src slightly
-    const iframe = document.getElementById('zoho-analytics-frame') as HTMLIFrameElement;
-    if (iframe) {
-      const currentSrc = iframe.src;
-      iframe.src = '';
-      setTimeout(() => {
-        iframe.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'refresh=' + Date.now();
-        // Set a timeout to consider the dashboard as loaded again
-        setTimeout(() => setIsLoading(false), 3000);
-      }, 100);
+    if (selectedReport !== 'd3visual') {
+      setIsLoading(true);
+      // Refresh the iframe by changing the src slightly
+      const iframe = document.getElementById('zoho-analytics-frame') as HTMLIFrameElement;
+      if (iframe) {
+        const currentSrc = iframe.src;
+        iframe.src = '';
+        setTimeout(() => {
+          iframe.src = currentSrc + (currentSrc.includes('?') ? '&' : '?') + 'refresh=' + Date.now();
+          // Set a timeout to consider the dashboard as loaded again
+          setTimeout(() => setIsLoading(false), 3000);
+        }, 100);
+      }
     }
   };
 
@@ -354,7 +361,7 @@ const ZohoAnalyticsDashboard = () => {
               Detailed Analysis
             </ToggleGroupItem>
             <ToggleGroupItem value="d3visual" aria-label="D3 Visualization">
-              D3 Visualization
+              India Map
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
@@ -367,7 +374,7 @@ const ZohoAnalyticsDashboard = () => {
             </div>
           )}
           
-          {hasError && (
+          {hasError && selectedReport !== 'd3visual' && (
             <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10">
               <div className="text-red-500 mb-4 text-6xl">!</div>
               <p className="text-red-700 mb-2">Unable to load the dashboard</p>
@@ -377,18 +384,22 @@ const ZohoAnalyticsDashboard = () => {
             </div>
           )}
           
-          <ScrollArea variant="fancy" className="h-full w-full">
-            <iframe 
-              id="zoho-analytics-frame"
-              frameBorder="0" 
-              width="100%" 
-              height={dashboardHeight} 
-              src={reports[selectedReport as keyof typeof reports]}
-              className="w-full"
-              onLoad={handleIframeLoad}
-              onError={handleIframeError}
-            ></iframe>
-          </ScrollArea>
+          {selectedReport === 'd3visual' ? (
+            <D3Visualization height={dashboardHeight} />
+          ) : (
+            <ScrollArea variant="fancy" className="h-full w-full">
+              <iframe 
+                id="zoho-analytics-frame"
+                frameBorder="0" 
+                width="100%" 
+                height={dashboardHeight} 
+                src={reports[selectedReport as keyof typeof reports]}
+                className="w-full"
+                onLoad={handleIframeLoad}
+                onError={handleIframeError}
+              ></iframe>
+            </ScrollArea>
+          )}
         </div>
       </CollapsibleContent>
     </Collapsible>
