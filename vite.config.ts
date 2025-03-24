@@ -20,4 +20,8 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: "dist", // Ensure the output directory is correctly named
+    assetsDir: "assets", // Place assets in a subdirectory
+  },
 }));
